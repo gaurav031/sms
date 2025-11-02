@@ -46,7 +46,11 @@ app.use('/api/', limiter);
 
 // CORS
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5173",
+  origin: [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    process.env.CLIENT_URL // Add your Vercel frontend URL here
+  ].filter(Boolean),
   credentials: true
 }));
 
@@ -95,6 +99,11 @@ app.use('/api/*', (req, res) => {
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
+
+// Vercel deployment fix
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('public'));
+}
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`API available at http://localhost:${PORT}/api`);
