@@ -1,3 +1,6 @@
+<img width="1893" height="860" alt="image" src="https://github.com/user-attachments/assets/fd1fd1cb-ceca-4c55-9d30-be8670368895" />
+
+
 # School Management System
 
 A comprehensive, secure, real-time, role-based School Management System built with modern web technologies.
@@ -234,13 +237,10 @@ npm test
 4. Push to branch (`git push origin feature/AmazingFeature`)
 5. Open Pull Request
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🆘 Support
 
-For support, email support@schoolmanagement.com or create an issue in the repository.
+For support, email gauravraaz2005@gmail.com or create an issue in the repository.
 
 ## 🙏 Acknowledgments
 
@@ -249,7 +249,3 @@ For support, email support@schoolmanagement.com or create an issue in the reposi
 - Socket.IO team for real-time capabilities
 - Tailwind CSS team for the utility-first CSS framework
 - All contributors and testers
-
----
-
-**Built with ❤️ for educational institutions worldwide**
