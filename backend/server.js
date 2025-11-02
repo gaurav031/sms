@@ -3,13 +3,10 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
-const { createServer } = require('http');
-const { Server } = require('socket.io');
 require('dotenv').config();
 
 const connectDB = require('./config/database');
 const { errorHandler } = require('./middleware/errorHandler');
-const socketHandler = require('./utils/socketHandler');
 
 // Routes
 const authRoutes = require('./routes/auth');
@@ -22,13 +19,6 @@ const examRoutes = require('./routes/exams');
 const assignmentRoutes = require('./routes/assignments');
 
 const app = express();
-const server = createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
-    methods: ["GET", "POST"]
-  }
-});
 
 // Connect Database
 connectDB();
@@ -61,10 +51,12 @@ app.use(express.urlencoded({ extended: true }));
 // Static Files
 app.use('/uploads', express.static('uploads'));
 
-// Socket.IO
-socketHandler(io);
+// Mock Socket.IO for serverless
 app.use((req, res, next) => {
-  req.io = io;
+  req.io = {
+    emit: () => {},
+    to: () => ({ emit: () => {} })
+  };
   next();
 });
 
@@ -98,15 +90,13 @@ app.use('/api/*', (req, res) => {
 // Error Handler
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
+// Export app for Vercel
+module.exports = app;
 
-// Vercel deployment fix
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('public'));
+// Local development server
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 }
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`API available at http://localhost:${PORT}/api`);
-});
-
-module.exports = { app, server, io };
